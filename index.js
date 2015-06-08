@@ -35,10 +35,14 @@ app.use('/api', api);
 		var bloguers = db.collection('bloguers');
 		var bloguer = req.body;
 		console.log(bloguer.id);
-	bloguers.findOne({id: bloguer.id}).then( function (respon){
+	    
+
+	    bloguers.findOne({id: bloguer.id}).then( function (respon){
 			if(respon != null){
 				console.log('dentro if');
-				return bloguers.replaceOne({id: bloguer.id}, bloguer,{upsert:true})
+				console.log(bloguer);
+				delete bloguer._id;
+				return bloguers.update({id: bloguer.id}, bloguer,{upsert:true})
 				.then(function(){
 					console.log('inside')
 					res.json(r);
@@ -48,6 +52,7 @@ app.use('/api', api);
 				});
 			}
 			else{
+					console.log('fora if');
 				return bloguers.insertOne(bloguer).then(function (r){
 				
 				}, function (err) {
