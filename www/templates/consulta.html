@@ -1,0 +1,55 @@
+	<div ng-controller="ConsultController as consultCtrl" >
+		<div class="center-block col-lg-8">
+			<form ng-submit = "consultCtrl.getUserByName(consultCtrl.userName)" novalidate>
+				<fieldset class="form-group">
+					<label>UserName</label>
+					<input ng-model="consultCtrl.userName" class="form-control">		
+				</fieldset>
+				<fieldset class="form-group">
+					<input type="submit" class="btn btn-primary" value="submit">
+				</fieldset>
+			</form>
+
+			<form name="dados" ng-submit="consultCtrl.saveBloguer(consultCtrl.bloguer)">
+				<fieldset class="form-group">
+					<label>	CEP </label>
+					<input ui-mask="99999-999"name = "cep" ng-blur="consultCtrl.checkCep(consultCtrl.bloguer.cep)"  ng-model="consultCtrl.bloguer.cep" class="form-control">
+				</fieldset>
+				<fieldset class="form-group">
+					<label>Endereco</label>
+					<input name = "endereco" ng-model="consultCtrl.bloguer.endereco" class="form-control" required>
+				</fieldset>
+				<fieldset class="form-group">
+					<label>email</label>
+					<input name= "email" ng-model="consultCtrl.bloguer.email" type="email" class="form-control" required>
+				</fieldset>
+				<fieldset class="form-group">
+					<label>telefone</label>
+					<input name= "telefone" ui-mask="(99) 9999-9999" ng-model="consultCtrl.bloguer.telefone" class="form-control" required>
+				</fieldset>
+				<fieldset class="form-group">
+					<label>Obs</label>
+					<input name = "obs" ng-model="consultCtrl.bloguer.obs" class="form-control">
+				</fieldset>
+				<button class = "btn btn-primary" type="submit" ng-disabled="dados.$invalid">save</button>
+			</form>
+		
+		</div>
+		<div class="col-lg-4">
+			<dl>
+				<dt>Username</dt>
+				<dd>{{consultCtrl.bloguer.username}}</dd>
+				<dt>Full name</dt>
+				<dd>{{consultCtrl.bloguer.full_name}}</dd>
+				<dt>Followers</dt>
+				<dd>{{consultCtrl.bloguer.followed_by}}</dd>
+				<dt>ID</dt>
+				<dd>{{consultCtrl.bloguer.id}}</dd>
+				<dt>Media Likes</dt>
+				<dd>{{consultCtrl.bloguer.mediaLikes}}</dd>
+				<dt>Media Comments</dt>
+				<dd>{{consultCtrl.bloguer.mediaComments}}</dd>
+			</dl>
+		</div>	
+	</div>
+	
