@@ -1,0 +1,56 @@
+<div ng-controller= "EnvioController as envioCtrl">
+		
+	<div class = "row">
+		<form name="dados" ng-submit="envioCtrl.addEnvio(envioCtrl.envio)">
+				<fieldset class="form-group">
+					<label>Bloguer</label>
+					<select ng-options = "bloguer as bloguer.username for bloguer in envioCtrl.bloguers" ng-model = "envioCtrl.envio.bloguer" required>
+					</select>					
+				</fieldset>
+				<fieldset class="form-group">
+					<label>Data de Envio</label>
+					<input name = "data_envio" type="date" ng-model= "envioCtrl.envio.dateEnvio" class="form-control" required>
+				</fieldset>
+				<fieldset class="form-group">
+					<label>Código de Rastreio</label>
+					<input  ng-model= "envioCtrl.envio.rastreio" class="form-control" required>
+				</fieldset>
+				
+				<fieldset class="form-group">
+					<label>Postou Instagram?</label>
+					<label><input ng-model="envioCtrl.envio.postInsta" type= "radio" ng-value="true">Sim</label>
+					<label><input ng-model="envioCtrl.envio.postInsta" type= "radio" ng-value="false">Não</label>
+					<input ng-show="envioCtrl.envio.postInsta" type = "date" ng-model = "envioCtrl.envio.dateInsta" class = "form-control">
+				</fieldset>
+				
+				<fieldset class="form-group">
+					<label>Postou Snap?</label>
+					<label><input ng-model="envioCtrl.envio.postSnap" type= "radio" ng-value="true">Sim</label>
+					<label><input ng-model="envioCtrl.envio.postSnap" type= "radio" ng-value="false">Não</label>
+					<div ng-show="envioCtrl.envio.postSnap"><input type="date" ng-model= "envioCtrl.envio.dateSnap" class="form-control"></div>
+					
+				</fieldset>
+				
+				<button class = "btn btn-primary" type="submit" ng-disabled="dados.$invalid">save</button>
+			</form>
+	</div>
+	<div class = "row"> <button ng-click="envioCtrl.listEnvios()">Lista</button></div>
+	<div class = "row">
+		<div ng-repeat = "envio in envioCtrl.envios">
+				{{$index+1}}
+				<dl>
+					<dt>Bloguer</dt>
+						<dd>{{envio.bloguer.username}}</dd>
+					<dt>Data de Envio</dt>
+						<dd>{{envio.dateEnvio}}</dd>
+					<dt>Codigo de Rastreio?</dt>
+						<dd>{{envio.rastreio}}</dd>
+					<dt>Postou insta?</dt>
+						<dd>{{}}</dd>
+					<dt>Postou Snap?</dt>
+						<dd>{{}}</dd>	
+				</dl>
+
+		</div>
+	</div>
+</div>

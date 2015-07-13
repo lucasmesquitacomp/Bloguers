@@ -1,17 +1,13 @@
 <div ng-controller="ListController as listCtrl">	
-	<button class="btn btn-primary" ng-click="listCtrl.listBloguer()">Listar</button>
+	
 	<div class= "row">
-		<div class="row-same-height">
+		
 			<div class="col-md-4" ng-repeat="bloguer in listCtrl.bloguers">
 				{{$index+1}}
 				<dl>
 					<dt>Full name</dt>
-						<dd>{{bloguer.full_name}}</dd>	
-
-					<dt>Follower</dt>
-
+						<dd>{{bloguer.full_name}}</dd>
 					<dt>Followers</dt>
-
 						<dd>{{bloguer.followed_by}}</dd>
 					<dt>MediaComments</dt>
 						<dd>{{bloguer.mediaComments}}</dd>
@@ -33,5 +29,4 @@
 				
 			</div>			
 		</div>
-	</div>
 </div>

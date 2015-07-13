@@ -15,6 +15,11 @@
 				url: '/lista',
 				templateUrl: '/templates/lista.html'
 			})
+			.state('envios',{
+				url: '/envios',
+				templateUrl: '/templates/envios.html'
+
+			})
 
 			;
 	})
@@ -112,24 +117,32 @@
 		app.factory('Instagram', InstagramFactory);
 		app.factory('Correios', CorreiosFactory);
 		
-		app.service("bloguers", function Bloguers(){
+		app.service("comm", function Bloguers($http){
 			var self = this;
 			self.bloguer = {};
 			self.bloguers =[];
+			this.listBloguers = function (){
+				return $http.get('/api/bloguers').then(function (data){
+					angular.extend(self.bloguers, data.data);
+					return self.bloguers;
+				});
+			}			
 		})
 
 
-		app.controller('ConsultController',function (bloguers,Correios,Instagram,$http,$scope,$q,$state){
+		app.controller('ConsultController',function (comm,Correios,Instagram,$http,$scope,$q,$state){
 			var self = this;
-			self.bloguer = bloguers.bloguer;
-			self.bloguers = bloguers.bloguers;
+			self.bloguer = comm.bloguer;
 			
-			
+			comm.listBloguers().then(function(data){
+				self.bloguers = data;
+			})
 			this.getUserByName = function(userName){
 				var searchRes 
 				Instagram.getUserByName(userName).then(function (res){
 					searchRes =/*possivel função de verificação*/ res.data.data[0];
-					return $q.all([Instagram.getUserData(searchRes.id), Instagram.getUserMedia(searchRes.id)])
+					return $q.all([Instagram.getUserData(searchRes.id), Instagram.getUserMedia(searchRes.id)])																																										}).then(function (promises) {
+					//promises[0] = primie resultada da get user data-> objeto simples
 					}).then(function (promises) {
 					
 					self.bloguer.username = promises[0].username;
@@ -148,9 +161,6 @@
 
 					self.bloguer.mediaLikes = Math.round(mediaLike/promises[1].length);
 					self.bloguer.mediaComments = Math.round(mediaComm/promises[1].length); 
-
-					
-					console.log(self.bloguer)
 				
 				}, function (err) {
 					console.log(err);
@@ -158,7 +168,6 @@
 			};
 
 			this.checkCep = function(cep){
-
 				Correios.getAddress(cep).then(function (res){
 					self.bloguer.endereco = res.logradouro + ', ' + res.bairro + ', ' + res.localidade + ', ' + res.uf
 
@@ -172,25 +181,19 @@
 				$http.post('/api/bloguers', bloguer).then(function (){
 				  console.log(bloguer);
 				} )				
-				
 				bloguers.bloguer = {};
 				self.bloguer = {};
+				self.userName = '';
 			}
-
-		
 		})
 		
-		app.controller("ListController",function (bloguers,Instagram,$http,$scope,$q,$state){
+		app.controller("ListController",function (comm,Instagram,$http,$scope,$q,$state,$interval){
 			var self = this;
-			self.bloguer = bloguers.bloguer;
-			self.bloguers = bloguers.bloguers;
+			self.bloguer = comm.bloguer;
 			
-			this.listBloguer = function (){
-				$http.get('/api/bloguers').then(function (data){
-					self.bloguers = data.data;
-			
-				})
-			}
+			comm.listBloguers().then(function(data){
+				self.bloguers = data;
+			})
 
 			this.getBloguer = function (id){
 				return $http.get('/api/bloguers/' + id)
@@ -204,12 +207,47 @@
 
 			this.editBloguer = function(id){
 				self.getBloguer(id).then(function (data){
-					console.log('testestes');
-					console.log(data.data);
 					bloguers.bloguer= data.data;
 					$state.go('consulta');
-					//função para mudar de stat a ser implementada
+
 				})
 			}
+		})
+
+		app.controller("EnvioController", function ($scope,$q,$state,$http,comm){
+			var self = this;
+			self.bloguer = comm.bloguer; 
+			self.envios = [];
+			self.envio = {};
+
+
+			comm.listBloguers().then(function(data){
+				self.bloguers = data;
+			})
+
+			this.listEnvios = function (){
+				$http.get('/api/envios').then(function (data){
+					self.envios = data;
+				})
+			}
+						
+			
+
+			this.addEnvio = function (envio){
+				console.log(envio);
+				$http.post('/api/envios', envio).then(function (){
+				  console.log(envio);
+				} )				
+				self.envio = {};
+			}
+			
+			this.delEnvio = function (){
+
+			}
+			this.refreshEnvios = function (){
+
+			}	
+			
+
 		})
 })();

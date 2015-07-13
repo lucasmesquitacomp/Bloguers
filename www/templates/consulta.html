@@ -1,23 +1,19 @@
 	<div ng-controller="ConsultController as consultCtrl" >
 		<div class="center-block col-lg-8">
-			<form ng-submit = "consultCtrl.getUserByName(consultCtrl.userName)" novalidate>
-				<fieldset class="form-group">
-					<label>UserName</label>
-					<input ng-model="consultCtrl.userName" class="form-control">		
-				</fieldset>
-				<fieldset class="form-group">
-					<input type="submit" class="btn btn-primary" value="submit">
-				</fieldset>
-			</form>
 
 			<form name="dados" ng-submit="consultCtrl.saveBloguer(consultCtrl.bloguer)">
 				<fieldset class="form-group">
+					<label>UserName</label>
+					<input name="username" ng-blur="consultCtrl.getUserByName(consultCtrl.userName)" ng-model="consultCtrl.userName" class="form-control">		
+				</fieldset>
+					<input type="hidden" required ng-model="consultCtrl.bloguer.username"> 
+				<fieldset class="form-group">
 					<label>	CEP </label>
-					<input ui-mask="99999-999"name = "cep" ng-blur="consultCtrl.checkCep(consultCtrl.bloguer.cep)"  ng-model="consultCtrl.bloguer.cep" class="form-control">
+					<input ui-mask="99999-999" name = "cep" ng-blur="consultCtrl.checkCep(consultCtrl.bloguer.cep)"  ng-model="consultCtrl.bloguer.cep" class="form-control" required>
 				</fieldset>
 				<fieldset class="form-group">
 					<label>Endereco</label>
-					<input name = "endereco" ng-model="consultCtrl.bloguer.endereco" class="form-control" required>
+					<input name = "endereco" ng-model="consultCtrl.bloguer.endereco" class="form-control" required readonly>
 				</fieldset>
 				<fieldset class="form-group">
 					<label>email</label>

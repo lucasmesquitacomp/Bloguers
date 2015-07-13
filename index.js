@@ -34,34 +34,17 @@ app.use('/api', api);
 	.post(function (req,res){
 		var bloguers = db.collection('bloguers');
 		var bloguer = req.body;
-		console.log(bloguer.id);
-	    
-
-	    bloguers.findOne({id: bloguer.id}).then( function (respon){
-			if(respon != null){
-				console.log('dentro if');
-				console.log(bloguer);
-				delete bloguer._id;
-				return bloguers.update({id: bloguer.id}, bloguer,{upsert:true})
-				.then(function(){
-					console.log('inside')
-					res.json(r);
-				})
-				.catch(function (err){
-					console.log(err);
-				});
-			}
-			else{
-					console.log('fora if');
-				return bloguers.insertOne(bloguer).then(function (r){
-				
-				}, function (err) {
-					console.log(err);
-					res.json(r);;
-				});
-			}
-		})
-
+		if(bloguers.findOne({id: bloguer.id})){
+			console.log('exist test');
+		}
+		else{
+			bloguers.insertOne(bloguer).then(function (r){
+				res.json(r);
+			}, function (err) {
+				console.log(err);
+				res.status(400).end();
+			});
+		}
 	});
 
 	
@@ -77,7 +60,8 @@ app.use('/api', api);
 	api.get('/bloguers/:id', function (req, res){	
 		var idd = req.params.id;
 		db.collection('bloguers').findOne({id: idd}).then(function (data){
-
+			console.log('teste');
+			console.log(data);
 			res.json(data);
 		})
 
